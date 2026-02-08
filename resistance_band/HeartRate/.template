@@ -1,0 +1,18 @@
+Vendor=WCH
+Toolchain=RISC-V
+Series=CH57X
+RTOS=NoneOS
+MCU=CH571R
+Link=WCH-Link
+PeripheralVersion=======1.0
+Description=======
+Mcu Type=CH57x
+Address=0x00000000
+Target Path=obj\Resband.hex
+CLKSpeed=1
+DebugInterfaceMode=-1
+Erase All=false
+Program=false
+Verify=false
+Reset=false
+SDIPrintf=false
