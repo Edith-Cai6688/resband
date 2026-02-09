@@ -68,18 +68,26 @@ int main(void)
     GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
     UART1_DefInit();
 #endif
-    GPIOA_ModeCfg(GPIO_Pin_9,GPIO_ModeOut_PP_5mA);
-    GPIOA_SetBits(GPIO_Pin_9);
-    //PRINT("%s\n", VER_LIB);
-    CH57X_BLEInit();
-    HAL_Init();
-    GAPRole_PeripheralInit();
-    GPIOA_SetBits(GPIO_Pin_13);
-    GPIOA_ModeCfg(GPIO_Pin_13,GPIO_ModeOut_PP_5mA);
-    GPIOA_SetBits(GPIO_Pin_14);
-    GPIOA_ModeCfg(GPIO_Pin_14, GPIO_ModeOut_PP_5mA);
-    ResBand_Init();
-    Main_Circulation();
+    // 1. 延时一下，等电源稳定
+    DelayMs(100); 
+
+    // 2. 绕过所有宏，直接用你定义的宏手动操作
+    LED1_DDR; // 这里会执行 R32_PB_DIR |= BV(7)
+    
+    while(1) {
+        R32_PB_CLR = LED1_BV; // 强制点亮
+        DelayMs(500);
+        R32_PB_OUT |= LED1_BV; // 强制熄灭
+        DelayMs(500);
+    }
+    // // USB使能
+    // GPIOB_ModeCfg(GPIO_Pin_12,GPIO_ModeOut_PP_5mA);
+    // GPIOB_SetBits(GPIO_Pin_12);
+
+    // HAL_Init();
+    // CH57X_BLEInit();
+    // GAPRole_PeripheralInit();
+    // Main_Circulation();
 }
 
 /******************************** endfile @ main ******************************/

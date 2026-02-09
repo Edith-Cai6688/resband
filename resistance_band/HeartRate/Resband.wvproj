@@ -8,9 +8,12 @@
 			"series": "CH57X",
 			"rtos": "NoneOS",
 			"mcu": "CH571R",
-			"description": "",
-			"link": "WCH-Link",
-			"peripheral_version": "1.0"
+			"description": "======",
+			"artifactType": "executable",
+			"link": "Others",
+			"peripheral_version": "======1.0",
+			"calibrateSupport": false,
+			"calibrateCommand": ""
 		},
 		"linkedFolders": [
 			{
@@ -50,7 +53,7 @@
 				"name": "IIC.c"
 			}
 		],
-		"projectName": "HeartRate",
+		"projectName": "Resband",
 		"architecture": "RISC-V",
 		"projectType": "c"
 	},
@@ -85,24 +88,6 @@
 					"${project}/StdPeriphDriver/CH57x_uart2.c",
 					"${project}/StdPeriphDriver/CH57x_uart3.c"
 				],
-				"riscvTargetProcessor": {
-					"architecture": "rv32i",
-					"multiply_extension": true,
-					"atomic_extension": true,
-					"floating_point": "none",
-					"compressed_extension": true,
-					"extra_compressed_extension": false,
-					"bit_extension": false,
-					"multiplication_subset_of_the_M_extension": false,
-					"integer_ABI": "ilp32",
-					"floating_point_ABI": "none",
-					"tuning": "default",
-					"code_model": "any",
-					"small_data_limit": 8,
-					"align": "default",
-					"save_restore": false,
-					"other_target_flags": ""
-				},
 				"optimization": {
 					"level": "size",
 					"message_length": true,
@@ -367,9 +352,27 @@
 					"show_totals": false,
 					"other_flags": ""
 				},
+				"configVariables": [],
+				"riscvTargetProcessor": {
+					"architecture": "rv32i",
+					"multiply_extension": true,
+					"atomic_extension": true,
+					"floating_point": "none",
+					"compressed_extension": true,
+					"extra_compressed_extension": false,
+					"bit_extension": false,
+					"multiplication_subset_of_the_M_extension": false,
+					"integer_ABI": "ilp32",
+					"floating_point_ABI": "none",
+					"tuning": "default",
+					"code_model": "any",
+					"small_data_limit": 8,
+					"align": "default",
+					"save_restore": false,
+					"other_target_flags": ""
+				},
 				"component_toolchain": "${WCH:Toolchain:GCC8}",
-				"name": "obj",
-				"configVariables": []
+				"name": "obj"
 			},
 			{
 				"buildArtifact": {
@@ -401,24 +404,6 @@
 					"${project}/StdPeriphDriver/CH57x_uart2.c",
 					"${project}/StdPeriphDriver/CH57x_uart3.c"
 				],
-				"riscvTargetProcessor": {
-					"architecture": "rv32i",
-					"multiply_extension": true,
-					"atomic_extension": true,
-					"floating_point": "none",
-					"compressed_extension": true,
-					"extra_compressed_extension": false,
-					"bit_extension": false,
-					"multiplication_subset_of_the_M_extension": false,
-					"integer_ABI": "ilp32",
-					"floating_point_ABI": "none",
-					"tuning": "default",
-					"code_model": "any",
-					"small_data_limit": 8,
-					"align": "default",
-					"save_restore": false,
-					"other_target_flags": ""
-				},
 				"optimization": {
 					"level": "size",
 					"message_length": true,
@@ -685,18 +670,36 @@
 					"show_totals": false,
 					"other_flags": ""
 				},
+				"configVariables": [],
+				"riscvTargetProcessor": {
+					"architecture": "rv32i",
+					"multiply_extension": true,
+					"atomic_extension": true,
+					"floating_point": "none",
+					"compressed_extension": true,
+					"extra_compressed_extension": false,
+					"bit_extension": false,
+					"multiplication_subset_of_the_M_extension": false,
+					"integer_ABI": "ilp32",
+					"floating_point_ABI": "none",
+					"tuning": "default",
+					"code_model": "any",
+					"small_data_limit": 8,
+					"align": "default",
+					"save_restore": false,
+					"other_target_flags": ""
+				},
 				"component_toolchain": "${WCH:Toolchain:GCC8}",
-				"name": "dbg",
-				"configVariables": []
+				"name": "dbg"
 			}
 		]
 	},
 	"flashConfig": {
 		"mcutype": "CH57x",
 		"address": "0x00000000",
-		"target_path": "",
+		"target_path": "obj\\Resband.hex",
 		"clkSpeed": "High",
-		"debug_interface_mode": "1-wire serial",
+		"debug_interface_mode": "",
 		"erase": false,
 		"program": false,
 		"verify": false,
@@ -705,8 +708,8 @@
 		"disablepowerout": false,
 		"clearcodeflash": false,
 		"disablecodeprotect": false,
-		"exepath": "",
-		"exearguments": ""
+		"exepath": "/usr/local/bin/wchisp",
+		"exearguments": "flash ./Resband.hex"
 	},
 	"debugConfigurations": {
 		"openOCDCfg": {
@@ -765,17 +768,17 @@
 			},
 			"debugInRAM": false
 		},
-		"svdpath": null,
+		"svdpath": "",
 		"output": {
 			"showDebugGDBTrace": true,
 			"saveDebugOutputToFile": false,
 			"showDebugOutputTimestamps": true
 		},
 		"reserve": {
-			"PROGRAM_NAME": "obj/HeartRate.elf",
-			"PROJECT_ATTR": "HeartRate",
+			"PROGRAM_NAME": "obj/Resband.elf",
+			"PROJECT_ATTR": "Resband",
 			"PROJECT_BUILD_CONFIG_AUTO_ATTR": true,
-			"PROJECT_BUILD_CONFIG_ID_ATTR": "",
+			"PROJECT_BUILD_CONFIG_ID_ATTR": "ilg.gnumcueclipse.managedbuild.cross.riscv.config.elf.release.1008047074",
 			"ATTR_BUILD_BEFORE_LAUNCH_ATTR": 2,
 			"GdbServerAllocateConsole": true,
 			"GdbServerAllocateTelnetConsole": false,

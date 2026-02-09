@@ -5,7 +5,7 @@
 			"type": "mrs-debugger",
 			"request": "launch",
 			"name": "Resband",
-			"cwd": "/home/mxk/resband/reistance_band_v0_1 (2)/resistance_band/HeartRate",
+			"cwd": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate",
 			"openOCDCfg": {
 				"useLocalOpenOCD": true,
 				"executable": "/usr/share/MRS2/MRS-linux-x64/resources/app/resources/linux/components/WCH/OpenOCD/OpenOCD/bin/openocd",
@@ -38,8 +38,8 @@
 					"additionalCommands": []
 				},
 				"loadedFiles": {
-					"executableFile": "/home/mxk/resband/reistance_band_v0_1 (2)/resistance_band/HeartRate/obj/Resband.elf",
-					"symbolFile": "/home/mxk/resband/reistance_band_v0_1 (2)/resistance_band/HeartRate/obj/Resband.elf",
+					"executableFile": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/obj/Resband.elf",
+					"symbolFile": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/obj/Resband.elf",
 					"executableFileOffset": 0,
 					"symbolFileOffset": 0
 				},

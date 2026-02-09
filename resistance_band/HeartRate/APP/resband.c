@@ -1,9 +1,9 @@
 /********************************** (C) COPYRIGHT *******************************
- * File Name          : heartrate.c
+ * File Name          : resband.c
  * Author             : WCH
  * Version            : V1.0
- * Date               : 2020/08/06
- * Description        : 心率计应用程序，初始化广播连接参数，然后广播，直至连接主机后，定时上传心率
+ * Date               : 2026/2/8
+ * Description        : 拉力计应用程序，初始化广播连接参数，然后广播，直至连接主机后，定时通过蓝牙传输数据
  *********************************************************************************
  * Copyright (c) 2021 Nanjing Qinheng Microelectronics Co., Ltd.
  * Attention: This software (modified or not) and binary are used for 
@@ -213,11 +213,9 @@ static gapBondCBs_t resBandBondCB = {
 /*********************************************************************
  * @fn      ResBand_Init
  *
- * @brief   Initialization function for the Heart Rate App Task.
+ * @brief   Initialization function for the resband App Task.
  *          This is called during initialization and should contain
- *          any application specific initialization (ie. hardware
- *          initialization/setup, table initialization, power up
- *          notificaiton ... ).
+ *          any application specific initialization 
  *
  * @param   task_id - the ID assigned by TMOS.  This ID should be
  *                    used to send messages and set timers.
@@ -226,7 +224,7 @@ static gapBondCBs_t resBandBondCB = {
  */
 void ResBand_Init()
 {
-    resBand_TaskID = TMOS_ProcessEventRegister(ResBand_ProcessEvent);
+    // resBand_TaskID = TMOS_ProcessEventRegister(ResBand_ProcessEvent);
 
     // Setup the GAP Peripheral Role Profile
     {
@@ -290,7 +288,7 @@ void ResBand_Init()
 /*********************************************************************
  * @fn      ResBand_ProcessEvent
  *
- * @brief   Heart Rate Application Task event processor.  This function
+ * @brief   Application Task event processor.  This function
  *          is called to process all events for the task.  Events
  *          include timers, messages and any other user defined events.
  *
