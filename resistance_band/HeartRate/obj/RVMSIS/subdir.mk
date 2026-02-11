@@ -5,7 +5,7 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 C_SRCS += \
-/home/mxk/resband/reistance_band_v0_1/SRC/RVMSIS/core_riscv.c 
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/RVMSIS/core_riscv.c 
 
 C_DEPS += \
 ./RVMSIS/core_riscv.d 
@@ -24,6 +24,6 @@ DIR_EXPANDS += \
 
 
 # Each subdirectory must supply rules for building sources it contributes
-RVMSIS/core_riscv.o: /home/mxk/resband/reistance_band_v0_1/SRC/RVMSIS/core_riscv.c
-	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -g -I"/home/mxk/resband/reistance_band_v0_1/SRC/Startup" -I"/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/APP/include" -I"/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/Profile/include" -I"/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc" -I"/home/mxk/resband/reistance_band_v0_1/resistance_band/HAL/include" -I"/home/mxk/resband/reistance_band_v0_1/SRC/Ld" -I"/home/mxk/resband/reistance_band_v0_1/resistance_band/LIB" -I"/home/mxk/resband/reistance_band_v0_1/SRC/RVMSIS" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
+RVMSIS/core_riscv.o: d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/RVMSIS/core_riscv.c
+	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -g -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/Startup" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/APP/include" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/Profile/include" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HAL/include" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/Ld" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/LIB" -I"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/RVMSIS" -std=gnu99 -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 

@@ -15,8 +15,8 @@
 #include "config.h"
 #include "HAL.h"
 #include "resband.h"
-#include "AS5600.h"
 #include "CH57x_common.h"
+#include "OY8699.h"
 
 /*********************************************************************
  * GLOBAL TYPEDEFS
@@ -68,26 +68,18 @@ int main(void)
     GPIOA_ModeCfg(bTXD1, GPIO_ModeOut_PP_5mA);
     UART1_DefInit();
 #endif
-    // 1. 延时一下，等电源稳定
-    DelayMs(100); 
-
-    // 2. 绕过所有宏，直接用你定义的宏手动操作
-    LED1_DDR; // 这里会执行 R32_PB_DIR |= BV(7)
+    // USB使能
+    GPIOB_ModeCfg(GPIO_Pin_12,GPIO_ModeOut_PP_5mA);
+    GPIOB_SetBits(GPIO_Pin_12);
     
-    while(1) {
-        R32_PB_CLR = LED1_BV; // 强制点亮
-        DelayMs(500);
-        R32_PB_OUT |= LED1_BV; // 强制熄灭
-        DelayMs(500);
-    }
-    // // USB使能
-    // GPIOB_ModeCfg(GPIO_Pin_12,GPIO_ModeOut_PP_5mA);
-    // GPIOB_SetBits(GPIO_Pin_12);
+    CH57X_BLEInit(); //1.使能TMOS调度系统
+    HAL_Init();//2.使能硬件
+    GAPRole_PeripheralInit();//3.使能BLE的应用协议
+    OY_SPI_Init();// 初始化位移读取传感器
 
-    // HAL_Init();
-    // CH57X_BLEInit();
-    // GAPRole_PeripheralInit();
-    // Main_Circulation();
+    ResBand_Init();
+
+    Main_Circulation();//启动TMOS调度系统
 }
 
 /******************************** endfile @ main ******************************/

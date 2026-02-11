@@ -1,61 +1,61 @@
 Profile/resbandservice.o: ../Profile/resbandservice.c \
- /home/mxk/resband/reistance_band_v0_1/resistance_band/HAL/include/config.h \
- /home/mxk/resband/reistance_band_v0_1/resistance_band/LIB/CH57xBLE_LIB.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_common.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH573SFR.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/RVMSIS/core_riscv.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_clk.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_uart.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_gpio.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_flash.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_pwr.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_pwm.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_adc.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_sys.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_timer.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_spi.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_usbdev.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_usbhost.h \
- /home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/ISP573.h \
- /home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/Profile/include/battservice.h \
- /home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/Profile/include/resbandservice.h
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HAL/include/config.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/LIB/CH57xBLE_LIB.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_common.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH573SFR.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/RVMSIS/core_riscv.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_clk.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_uart.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_gpio.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_flash.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_pwr.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_pwm.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_adc.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_sys.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_timer.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_spi.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_usbdev.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_usbhost.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/ISP573.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/Profile/include/battservice.h \
+ d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/Profile/include/resbandservice.h
 
-/home/mxk/resband/reistance_band_v0_1/resistance_band/HAL/include/config.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HAL/include/config.h:
 
-/home/mxk/resband/reistance_band_v0_1/resistance_band/LIB/CH57xBLE_LIB.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/LIB/CH57xBLE_LIB.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_common.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_common.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH573SFR.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH573SFR.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/RVMSIS/core_riscv.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/RVMSIS/core_riscv.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_clk.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_clk.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_uart.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_uart.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_gpio.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_gpio.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_flash.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_flash.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_pwr.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_pwr.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_pwm.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_pwm.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_adc.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_adc.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_sys.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_sys.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_timer.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_timer.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_spi.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_spi.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_usbdev.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_usbdev.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/CH57x_usbhost.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/CH57x_usbhost.h:
 
-/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver/inc/ISP573.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver/inc/ISP573.h:
 
-/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/Profile/include/battservice.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/Profile/include/battservice.h:
 
-/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/Profile/include/resbandservice.h:
+d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/HeartRate/Profile/include/resbandservice.h:

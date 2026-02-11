@@ -21,6 +21,7 @@
 #include "resbandservice.h"
 #include "AS5600.h"
 #include "tension.h"
+#include "OY8699.h"
 
 /*********************************************************************
  * MACROS
@@ -224,7 +225,7 @@ static gapBondCBs_t resBandBondCB = {
  */
 void ResBand_Init()
 {
-    // resBand_TaskID = TMOS_ProcessEventRegister(ResBand_ProcessEvent);
+    resBand_TaskID = TMOS_ProcessEventRegister(ResBand_ProcessEvent);
 
     // Setup the GAP Peripheral Role Profile
     {
@@ -250,12 +251,6 @@ void ResBand_Init()
         GAPBondMgr_SetParameter(GAPBOND_PERI_BONDING_ENABLED, sizeof(uint8_t), &bonding);
     }
 
-    // Setup the Heart Rate Characteristic Values
-    {
-        uint8_t sensLoc = RESBAND_SENS_LOC_WRIST;
-        ResBand_SetParameter(RESBAND_SENS_LOC, sizeof(uint8_t), &sensLoc);
-    }
-
     // Setup Battery Characteristic Values
     {
         uint8_t critical = DEFAULT_BATT_CRITICAL_LEVEL;
@@ -265,18 +260,18 @@ void ResBand_Init()
     // Initialize GATT attributes
     GGS_AddService(GATT_ALL_SERVICES);         // GAP
     GATTServApp_AddService(GATT_ALL_SERVICES); // GATT attributes
-    ResBand_AddService(GATT_ALL_SERVICES);
+
+    // 注册BLE的三个服务（服务层代码）
+    ResBand_AddService(GATT_ALL_SERVICES); // *** 核心代码逻辑 ***
     DevInfo_AddService();
     Batt_AddService();
 
     // Set the GAP Characteristics
     GGS_SetParameter(GGS_DEVICE_NAME_ATT, GAP_DEVICE_NAME_LEN, attDeviceName);
 
-    // Register for Heart Rate service callback
-    ResBand_Register(resBandCB);
-
-    // Register for Battery service callback;
-    Batt_Register(resBandBattCB);
+    // 注册BLE的回调函数(应用层代码)
+    ResBand_Register(resBandCB);  // 传感器测量回调函数 *** 核心代码逻辑 ***
+    Batt_Register(resBandBattCB); // 电池回调函数
 
     // Setup a delayed profile startup
     tmos_set_event(resBand_TaskID, START_DEVICE_EVT);
@@ -300,6 +295,7 @@ void ResBand_Init()
  */
 uint16_t ResBand_ProcessEvent(uint8_t task_id, uint16_t events)
 {
+    // 处理系统消息，有其他任务给当前任务发送消息
     if(events & SYS_EVENT_MSG)
     {
         uint8_t *pMsg;
@@ -326,7 +322,7 @@ uint16_t ResBand_ProcessEvent(uint8_t task_id, uint16_t events)
 
     if(events & RESBAND_PERIODIC_EVT)
     {
-        // Perform periodic heart rate task
+        // 弹力带周期事件
         resBandPeriodicTask();
 
         return (events ^ RESBAND_PERIODIC_EVT);
@@ -408,101 +404,18 @@ static void resBandMeasNotify(void)
     if(resBandMeas.pValue != NULL)
     {
         uint8_t *p = resBandMeas.pValue;
-        // uint8_t  flags = resBandFlags[resBandFlagsIdx];
 
-        // build heart rate measurement structure from simulated values
-        // *p++ = flags;
+        // 直接读取 Product_ID1 (0x00) 和 Product_ID2 (0x01)
+        uint8_t id1 = OY_Read_Reg(0x00);
 
-        //1.读取原始角度数值
-        resBandAngle = AS5600_ReadTwoByte(_raw_ang_hi, _raw_ang_lo);
-
-        TensionCalculator_UpdateTrainingStats(resBandAngle);
-
-        // 2. 计算拉力值
-        uint16_t tension_value = TensionCalculator_GetTensionValue(resBandAngle);
-
-
-        // 3. 构建数据包：2字节拉力
-        *p++ = LO_UINT16(tension_value);    // 拉力低字节
-        *p++ = HI_UINT16(tension_value);    // 拉力高字节
+        // 填充到蓝牙发送缓冲区
+        *p++ = id1;    // 预期收到 0x30
 
         resBandMeas.len = (uint8_t)(p - resBandMeas.pValue);
 
         if(ResBand_MeasNotify(gapConnHandle, &resBandMeas) != SUCCESS)
         {
             GATT_bm_free((gattMsg_t *)&resBandMeas, ATT_HANDLE_VALUE_NOTI);
-        }
-
-//        if(stats.total_pulls > lastPullCount && stats.current_pull_duration > 0)
-//        {
-//            if(isTrainingDataSubscribed)  // 检查训练数据是否已订阅
-//            {
-//                SendTrainingDataNotification();  // 独立发送训练数据
-//                lastPullCount = stats.total_pulls;
-//            }
-//        }
-
-        SendTrainingDataNotification();  // 直接发送当前记录
-
-        // SDA_IN();
-        // resBandAngle = GPIOA_ReadPortPin(GPIO_Pin_14);
-
-        //        *p++ = LO_UINT16(resBandAngle);
-        //        *p++ = HI_UINT16(resBandAngle);
-        //
-        //        resBandMeas.len = (uint8_t)(p - resBandMeas.pValue);
-
-        // if(++resBandAngle == ANGLE_MAX)
-        // {
-        //     resBandAngle = ANGLE_DEFAULT;
-        // }
-    }
-}
-
-/*********************************************************************
- * @fn      SendTrainingDataNotification
- *
- * @brief   发送训练数据通知
- */
-static void SendTrainingDataNotification(void)
-{
-    if(!isTrainingDataSubscribed) return;
-
-    TrainingStats_t stats;
-    TensionCalculator_GetTrainingStats(&stats);
-
-    resBandTrainingNoti.pValue = GATT_bm_alloc(gapConnHandle, ATT_HANDLE_VALUE_NOTI,
-                                              RESBAND_TRAINING_DATA_LEN, NULL, 0);
-
-    if(resBandTrainingNoti.pValue != NULL)
-    {
-        uint8_t *p = resBandTrainingNoti.pValue;
-        uint16_t current_tension = TensionCalculator_GetTensionValue(resBandAngle);
-        uint16_t max_tension_value = (uint16_t)(stats.max_tension * 100.0f);
-
-        // 构建训练数据包 (8字节)
-        *p++ = LO_UINT16(stats.total_pulls);        // 拉动计数低字节
-        *p++ = HI_UINT16(stats.total_pulls);        // 拉动计数高字节
-
-        *p++ = LO_UINT16(stats.current_pull_duration); // 持续时间低字节
-        *p++ = HI_UINT16(stats.current_pull_duration); // 持续时间高字节
-
-        *p++ = LO_UINT16(max_tension_value);        // 最大拉力低字节
-        *p++ = HI_UINT16(max_tension_value);        // 最大拉力高字节
-
-        *p++ = LO_UINT16(current_tension);          // 当前拉力低字节
-        *p++ = HI_UINT16(current_tension);          // 当前拉力高字节
-
-        resBandTrainingNoti.len = RESBAND_TRAINING_DATA_LEN;
-
-        if(ResBand_TrainingDataNotify(gapConnHandle, &resBandTrainingNoti) != SUCCESS)
-        {
-            GATT_bm_free((gattMsg_t *)&resBandTrainingNoti, ATT_HANDLE_VALUE_NOTI);
-        }
-        else
-        {
-            PRINT("发送训练数据: 计数=%lu, 时长=%lums, 最大拉力=%.1fkgf\n",
-                  stats.total_pulls, stats.current_pull_duration, stats.max_tension);
         }
     }
 }
@@ -615,71 +528,42 @@ static void resBandCB(uint8_t event)
             isResBandSubscribed = TRUE;
             tmos_stop_task(resBand_TaskID, RESBAND_SHUTDOWN_EVT);
 
-            // 初始化拉力计算模块
-            TensionCalculator_Init();
-
             if(gapProfileState == GAPROLE_CONNECTED)
             {
                 tmos_start_task(resBand_TaskID, RESBAND_PERIODIC_EVT, DEFAULT_RESBAND_PERIOD);
             }
-            PRINT("拉力测量通知已启用\n");
             break;
 
         case RESBAND_MEAS_NOTI_DISABLED:
             isResBandSubscribed = FALSE;
             tmos_start_task(resBand_TaskID, RESBAND_SHUTDOWN_EVT, RESBAND_SUB_TIMEOUT_MS);
             tmos_stop_task(resBand_TaskID, RESBAND_PERIODIC_EVT);
-            PRINT("拉力测量通知已禁用\n");
             break;
 
-        case RESBAND_TRAINING_NOTI_ENABLED:
-            isTrainingDataSubscribed = TRUE;
-            tmos_stop_task(resBand_TaskID, RESBAND_SHUTDOWN_EVT);
-            PRINT("训练数据通知已启用\n");
-            break;
+        // case RESBAND_COMMAND_SET:
+        //     {
+        //         uint8_t command = 0;
+        //         ResBand_GetParameter(RESBAND_COMMAND, &command);
 
-        case RESBAND_TRAINING_NOTI_DISABLED:
-            isTrainingDataSubscribed = FALSE;
-            if(!isResBandSubscribed)
-            {
-                tmos_start_task(resBand_TaskID, RESBAND_SHUTDOWN_EVT, RESBAND_SUB_TIMEOUT_MS);
-            }
-            PRINT("训练数据通知已禁用\n");
-            break;
-
-        case RESBAND_COMMAND_SET:
-            {
-                uint8_t command = 0;
-                ResBand_GetParameter(RESBAND_COMMAND, &command);
-
-                if(command == RESBAND_COMMAND_CALIBRATE_ZERO)
-                {
-                    // 校准零位
-                    uint16_t current_angle = AS5600_ReadTwoByte(_raw_ang_hi, _raw_ang_lo);
-                    TensionCalculator_CalibrateZero(current_angle);
-                    PRINT("零位校准完成: 0x%04X\n", current_angle);
-                }else if(command == RESBAND_COMMAND_RESET_STATS)
-                {
-                    TensionCalculator_ResetTrainingStats();
-                    lastPullCount = 0;
-                    PRINT("训练统计数据已重置\n");
-                }
-                else if(command == RESBAND_COMMAND_ENERGY_EXP)
-                {
-                    PRINT("收到能量重置命令\n");
-                    // 可以在这里重置计数等
-                }
-            }
-            break;
-
-        case RESBAND_PARAMS_UPDATED:
-            {
-                uint16_t pound, length;
-                ResBand_GetBandParameters(&pound, &length);
-                TensionCalculator_SetParameters(pound, length);
-                PRINT("拉力计算参数更新 - 磅数: %d, 长度: %dcm\n", pound, length);
-            }
-            break;
+        //         if(command == RESBAND_COMMAND_CALIBRATE_ZERO)
+        //         {
+        //             // 校准零位
+        //             uint16_t current_angle = AS5600_ReadTwoByte(_raw_ang_hi, _raw_ang_lo);
+        //             TensionCalculator_CalibrateZero(current_angle);
+        //             PRINT("零位校准完成: 0x%04X\n", current_angle);
+        //         }else if(command == RESBAND_COMMAND_RESET_STATS)
+        //         {
+        //             TensionCalculator_ResetTrainingStats();
+        //             lastPullCount = 0;
+        //             PRINT("训练统计数据已重置\n");
+        //         }
+        //         else if(command == RESBAND_COMMAND_ENERGY_EXP)
+        //         {
+        //             PRINT("收到能量重置命令\n");
+        //             // 可以在这里重置计数等
+        //         }
+        //     }
+            // break;
 
         default:
             break;

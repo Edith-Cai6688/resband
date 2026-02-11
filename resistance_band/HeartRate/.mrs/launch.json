@@ -5,12 +5,12 @@
 			"type": "mrs-debugger",
 			"request": "launch",
 			"name": "Resband",
-			"cwd": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate",
+			"cwd": "d:\\BaiduSyncdisk\\Edith\\墨小孔实习\\resband\\resistance_band\\HeartRate",
 			"openOCDCfg": {
 				"useLocalOpenOCD": true,
-				"executable": "/usr/share/MRS2/MRS-linux-x64/resources/app/resources/linux/components/WCH/OpenOCD/OpenOCD/bin/openocd",
+				"executable": "d:/LenovoSoftstore/Install/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD/bin/openocd.exe",
 				"configOptions": [
-					"-f \"/usr/share/MRS2/MRS-linux-x64/resources/app/resources/linux/components/WCH/OpenOCD/OpenOCD/bin/wch-riscv.cfg\" -c \"chip_id CH57x\""
+					"-f \"d:/LenovoSoftstore/Install/MounRiver_Studio2/resources/app/resources/win32/components/WCH/OpenOCD/OpenOCD/bin/wch-riscv.cfg\" -c \"chip_id CH57x\""
 				],
 				"gdbport": 3333,
 				"telnetport": 4444,
@@ -22,7 +22,7 @@
 				"enableNoZeroWaitingAreaFlash": false
 			},
 			"gdbCfg": {
-				"executable": "/usr/share/MRS2/MRS-linux-x64/resources/app/resources/linux/components/WCH/Toolchain/RISC-V Embedded GCC/bin/riscv-none-embed-gdb",
+				"executable": "d:/LenovoSoftstore/Install/MounRiver_Studio2/resources/app/resources/win32/components/WCH/Toolchain/RISC-V Embedded GCC/bin/riscv-none-embed-gdb.exe",
 				"commands": [
 					"set mem inaccessible-by-default off",
 					"set architecture riscv:rv32",
@@ -38,8 +38,8 @@
 					"additionalCommands": []
 				},
 				"loadedFiles": {
-					"executableFile": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/obj/Resband.elf",
-					"symbolFile": "/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate/obj/Resband.elf",
+					"executableFile": "d:\\BaiduSyncdisk\\Edith\\墨小孔实习\\resband\\resistance_band\\HeartRate\\obj\\Resband.elf",
+					"symbolFile": "d:\\BaiduSyncdisk\\Edith\\墨小孔实习\\resband\\resistance_band\\HeartRate\\obj\\Resband.elf",
 					"executableFileOffset": 0,
 					"symbolFileOffset": 0
 				},

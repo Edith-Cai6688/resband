@@ -28,12 +28,8 @@ extern "C" {
 
 // ResBand serv uuid
 #define RESBAND_SERV_UUID     0xABCD   // 自定义服务UUID
-#define RESBAND_MEAS_UUID     0xABCE   // 自定义特征UUID
+#define RESBAND_MEAS_UUID     0xABCE   // 自定义特征值UUID
 #define RESBAND_CTRL_PT_UUID  0xABCF   // 自定义command uuid
-#define RESBAND_PARAMS_UUID   0xFFF2   // 用于参数传输的特征值
-#define RESBAND_TRAINING_UUID 0xFFF3   // 训练数据特征UUID
-
-
 
 
 // Heart Rate Service Parameters

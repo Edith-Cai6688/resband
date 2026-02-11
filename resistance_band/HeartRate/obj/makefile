@@ -56,7 +56,7 @@ main-build: Resband.elf secondary-outputs
 
 # Tool invocations
 Resband.elf: $(OBJS) $(USER_OBJS_ESCAPE)
-	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -g -T "/home/mxk/resband/reistance_band_v0_1/SRC/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -L"/home/mxk/resband/reistance_band_v0_1/resistance_band/HeartRate" -L"/home/mxk/resband/reistance_band_v0_1/resistance_band/LIB" -L"/home/mxk/resband/reistance_band_v0_1/SRC/StdPeriphDriver" -Xlinker --print-memory-usage -Wl,-Map,"Resband.map" --specs=nano.specs --specs=nosys.specs -o "Resband.elf" $(OBJS) $(LIBS)
+	@	riscv-none-embed-gcc -march=rv32imac -mabi=ilp32 -mcmodel=medany -msmall-data-limit=8 -mno-save-restore -fmax-errors=20 -Os -fmessage-length=0 -fsigned-char -ffunction-sections -fdata-sections -fno-common -g -T "d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/Ld/Link.ld" -nostartfiles -Xlinker --gc-sections -L"d:\BaiduSyncdisk\Edith\墨小孔实习\resband\resistance_band\HeartRate" -L"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/resistance_band/LIB" -L"d:/BaiduSyncdisk/Edith/墨小孔实习/resband/SRC/StdPeriphDriver" -Xlinker --print-memory-usage -Wl,-Map,"Resband.map" --specs=nano.specs --specs=nosys.specs -o "Resband.elf" $(OBJS) $(LIBS)
 Resband.hex: Resband.elf
 	@	riscv-none-embed-objcopy -O ihex "Resband.elf" "Resband.hex"
 Resband.lst: Resband.elf

@@ -21,7 +21,7 @@
  *
  * @return  none
  */
-void SPI0_MasterDefInit(void)
+void SPI0_MasterDefInit(void) 
 {
     R8_SPI0_CLOCK_DIV = 4; // 主频时钟4分频
     R8_SPI0_CTRL_MOD = RB_SPI_ALL_CLEAR;
@@ -125,7 +125,7 @@ uint8_t SPI0_MasterRecvByte(void)
  * @brief   使用FIFO连续发送多字节
  *
  * @param   pbuf    - 待发送的数据内容首地址
- * @param   len     - 请求发送的数据长度，最大4095
+ * @param   len     - 请求发送的数据长度，最大4095(字节数)
  *
  * @return  none
  */

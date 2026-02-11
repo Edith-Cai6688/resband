@@ -48,20 +48,10 @@ const uint8_t resBandServUUID[ATT_BT_UUID_SIZE] = {
 const uint8_t resBandMeasUUID[ATT_BT_UUID_SIZE] = {
     LO_UINT16(RESBAND_MEAS_UUID), HI_UINT16(RESBAND_MEAS_UUID)};
 
-// Sensor location characteristic
-const uint8_t resBandSensLocUUID[ATT_BT_UUID_SIZE] = {
-    LO_UINT16(BODY_SENSOR_LOC_UUID), HI_UINT16(BODY_SENSOR_LOC_UUID)};
-
 // Command characteristic
 const uint8_t resBandCommandUUID[ATT_BT_UUID_SIZE] = {
     LO_UINT16(RESBAND_CTRL_PT_UUID), HI_UINT16(RESBAND_CTRL_PT_UUID)};
 
-// 添加参数特征值UUID
-const uint8_t resBandParamsUUID[ATT_BT_UUID_SIZE] = {
-    LO_UINT16(RESBAND_PARAMS_UUID), HI_UINT16(RESBAND_PARAMS_UUID)};
-
-const uint8_t resBandTrainingUUID[ATT_BT_UUID_SIZE] = {
-    LO_UINT16(RESBAND_TRAINING_UUID), HI_UINT16(RESBAND_TRAINING_UUID)};
 /*********************************************************************
  * EXTERNAL VARIABLES
  */
@@ -101,16 +91,12 @@ static uint8_t resBandCommand = 0;
 static uint8_t resBandParamsProps = GATT_PROP_READ | GATT_PROP_WRITE;  // 可读可写
 static uint8_t resBandParams[4] = {0};  // 4字节存储参数
 
-// Training Data Characteristic (新增)
-static uint8_t resBandTrainingProps = GATT_PROP_NOTIFY;
-static uint8_t resBandTrainingData[RESBAND_TRAINING_DATA_LEN] = {0};
-static gattCharCfg_t resBandTrainingClientCharCfg[GATT_MAX_NUM_CONN];
 /*********************************************************************
  * Profile Attributes - Table
  */
 
 static gattAttribute_t resBandAttrTbl[] = {
-    // Resistance Band Service
+    // 定义服务的UUID为0xABCD
     {
         {ATT_BT_UUID_SIZE, primaryServiceUUID}, /* type */
         GATT_PERMIT_READ,                       /* permissions */
@@ -118,7 +104,7 @@ static gattAttribute_t resBandAttrTbl[] = {
         (uint8_t *)&resBandService            /* pValue */
     },
 
-    // Resistance Band Measurement Declaration
+    // 定义特征（notify）
     {
         {ATT_BT_UUID_SIZE, characterUUID},
         GATT_PERMIT_READ,
@@ -126,15 +112,15 @@ static gattAttribute_t resBandAttrTbl[] = {
         &resBandMeasProps
     },
 
-    // Resistance Band Measurement Value
+    // 定义特征值
     {
         {ATT_BT_UUID_SIZE, resBandMeasUUID},
-        0,
+        0,   // 手机端可以notify
         0,
         &resBandMeas
     },
 
-    // Heart Rate Measurement Client Characteristic Configuration
+    // 定义notify的CCCD（手机可以控制接收notify）
     {
         {ATT_BT_UUID_SIZE, clientCharCfgUUID},
         GATT_PERMIT_READ | GATT_PERMIT_WRITE,
@@ -142,77 +128,21 @@ static gattAttribute_t resBandAttrTbl[] = {
         (uint8_t *)&resBandMeasClientCharCfg
     },
 
-    // Sensor Location Declaration
-    {
-        {ATT_BT_UUID_SIZE, characterUUID},
-        GATT_PERMIT_READ,
-        0,
-        &resBandSensLocProps
-    },
+    // // 定义命令特征
+    // {
+    //     {ATT_BT_UUID_SIZE, characterUUID},
+    //     GATT_PERMIT_READ,
+    //     0,
+    //     &resBandCommandProps
+    // },
 
-    // Sensor Location Value
-    {
-        {ATT_BT_UUID_SIZE, resBandSensLocUUID},
-        GATT_PERMIT_READ,
-        0,
-        &resBandSensLoc
-    },
-
-    // Command Declaration
-    {
-        {ATT_BT_UUID_SIZE, characterUUID},
-        GATT_PERMIT_READ,
-        0,
-        &resBandCommandProps
-    },
-
-    // Command Value
-    {
-        {ATT_BT_UUID_SIZE, resBandCommandUUID},
-        GATT_PERMIT_WRITE,
-        0,
-        &resBandCommand
-    },
-
-    // Parameters Declaration
-    {
-        {ATT_BT_UUID_SIZE, characterUUID},
-        GATT_PERMIT_READ,
-        0,
-        &resBandParamsProps
-    },
-
-    // Parameters Value
-    {
-        {ATT_BT_UUID_SIZE, resBandParamsUUID},
-        GATT_PERMIT_READ | GATT_PERMIT_WRITE,  // 允许写入
-        0,
-        resBandParams
-    },     // 指向参数数组
-
-    // Training Data Declaration (新增)
-    {
-        {ATT_BT_UUID_SIZE, characterUUID},
-        GATT_PERMIT_READ,
-        0,
-        &resBandTrainingProps
-    },
-
-    // Training Data Value
-    {
-        {ATT_BT_UUID_SIZE, resBandTrainingUUID},
-        0,
-        0,
-        resBandTrainingData
-    },
-
-    // Training Data Client Characteristic Configuration
-    {
-        {ATT_BT_UUID_SIZE, clientCharCfgUUID},
-        GATT_PERMIT_READ | GATT_PERMIT_WRITE,
-        0,
-        (uint8_t *)&resBandTrainingClientCharCfg
-    }
+    // // 定义命令特征值
+    // {
+    //     {ATT_BT_UUID_SIZE, resBandCommandUUID},
+    //     GATT_PERMIT_WRITE,
+    //     0,
+    //     &resBandCommand
+    // },
 
 };
 
@@ -258,7 +188,6 @@ bStatus_t ResBand_AddService(uint32_t services)
 
     // Initialize Client Characteristic Configuration attributes
     GATTServApp_InitCharCfg(INVALID_CONNHANDLE, resBandMeasClientCharCfg);
-    GATTServApp_InitCharCfg(INVALID_CONNHANDLE, resBandTrainingClientCharCfg);
 
     if(services & RESBAND_SERVICE)
     {
@@ -401,18 +330,18 @@ bStatus_t ResBand_MeasNotify(uint16_t connHandle, attHandleValueNoti_t *pNoti)
     return bleIncorrectMode;
 }
 
-bStatus_t ResBand_TrainingDataNotify(uint16_t connHandle, attHandleValueNoti_t *pNoti)
-{
-    uint16_t value = GATTServApp_ReadCharCfg(connHandle, resBandTrainingClientCharCfg);
+// bStatus_t ResBand_TrainingDataNotify(uint16_t connHandle, attHandleValueNoti_t *pNoti)
+// {
+//     uint16_t value = GATTServApp_ReadCharCfg(connHandle, resBandTrainingClientCharCfg);
 
-    if(value & GATT_CLIENT_CFG_NOTIFY)
-    {
-        pNoti->handle = resBandAttrTbl[RESBAND_TRAINING_DATA_VALUE_POS].handle;
-        return GATT_Notification(connHandle, pNoti, FALSE);
-    }
+//     if(value & GATT_CLIENT_CFG_NOTIFY)
+//     {
+//         pNoti->handle = resBandAttrTbl[RESBAND_TRAINING_DATA_VALUE_POS].handle;
+//         return GATT_Notification(connHandle, pNoti, FALSE);
+//     }
 
-    return bleIncorrectMode;
-}
+//     return bleIncorrectMode;
+// }
 
 /*********************************************************************
  * @fn          resBand_ReadAttrCB
@@ -444,27 +373,23 @@ static uint8_t resBand_ReadAttrCB(uint16_t connHandle, gattAttribute_t *pAttr,
 
     switch(uuid)
     {
-        case BODY_SENSOR_LOC_UUID:  // 传感器位置
-            *pLen = 1;
-            pValue[0] = *pAttr->pValue;
-            break;
 
-        case RESBAND_PARAMS_UUID:  // 参数特征值
-            if(maxLen >= 4)
-            {
-                *pLen = 4;
-                // 小端格式返回当前参数
-                pValue[0] = LO_UINT16(bandPound);
-                pValue[1] = HI_UINT16(bandPound);
-                pValue[2] = LO_UINT16(bandLength);
-                pValue[3] = HI_UINT16(bandLength);
-                PRINT("读取参数 - 磅数: %d, 长度: %dcm\n", bandPound, bandLength);
-            }
-            else
-            {
-                status = ATT_ERR_INSUFFICIENT_RESOURCES;
-            }
-            break;
+        // case RESBAND_PARAMS_UUID:  // 参数特征值
+        //     if(maxLen >= 4)
+        //     {
+        //         *pLen = 4;
+        //         // 小端格式返回当前参数
+        //         pValue[0] = LO_UINT16(bandPound);
+        //         pValue[1] = HI_UINT16(bandPound);
+        //         pValue[2] = LO_UINT16(bandLength);
+        //         pValue[3] = HI_UINT16(bandLength);
+        //         PRINT("读取参数 - 磅数: %d, 长度: %dcm\n", bandPound, bandLength);
+        //     }
+        //     else
+        //     {
+        //         status = ATT_ERR_INSUFFICIENT_RESOURCES;
+        //     }
+        //     break;
 
         default:
             status = ATT_ERR_ATTR_NOT_FOUND;
@@ -537,8 +462,8 @@ static bStatus_t resBand_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr
             break;
 
         case GATT_CLIENT_CHAR_CFG_UUID:
-            // 处理实时拉力测量的CCC
-            if(pAttr->pValue == (uint8_t *)&resBandMeasClientCharCfg)
+            // 接收到CCCD改变的信息（手机端启用notify）
+            if(pAttr->pValue == (uint8_t *)&resBandMeasClientCharCfg) //识别任务，开始
             {
                 status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
                                                         offset, GATT_CLIENT_CFG_NOTIFY);
@@ -548,50 +473,6 @@ static bStatus_t resBand_WriteAttrCB(uint16_t connHandle, gattAttribute_t *pAttr
                     (*resBandServiceCB)((charCfg == GATT_CFG_NO_OPERATION) ?
                                        RESBAND_MEAS_NOTI_DISABLED : RESBAND_MEAS_NOTI_ENABLED);
                 }
-            }
-            // 处理训练数据的CCC
-            else if(pAttr->pValue == (uint8_t *)&resBandTrainingClientCharCfg)
-            {
-                status = GATTServApp_ProcessCCCWriteReq(connHandle, pAttr, pValue, len,
-                                                        offset, GATT_CLIENT_CFG_NOTIFY);
-                if(status == SUCCESS)
-                {
-                    uint16_t charCfg = BUILD_UINT16(pValue[0], pValue[1]);
-                    (*resBandServiceCB)((charCfg == GATT_CFG_NO_OPERATION) ?
-                                       RESBAND_TRAINING_NOTI_DISABLED : RESBAND_TRAINING_NOTI_ENABLED);
-                }
-            }
-            break;
-
-
-        case RESBAND_PARAMS_UUID:  // 新增：参数写入处理
-            if(offset > 0)
-            {
-                status = ATT_ERR_ATTR_NOT_LONG;
-            }
-            else if(len != 4)  // 必须4字节：2字节磅数 + 2字节长度
-            {
-                status = ATT_ERR_INVALID_VALUE_SIZE;
-                PRINT("参数长度错误: 需要4字节，收到%d字节\n", len);
-            }
-            else
-            {
-                // 保存接收到的参数
-                memcpy(pAttr->pValue, pValue, len);
-
-                // 解析参数（小端格式）
-                bandPound = BUILD_UINT16(pValue[1], pValue[0]);    // 磅数
-                bandLength = BUILD_UINT16(pValue[3], pValue[2]);   // 长度(cm)
-
-                PRINT("收到参数: %d磅, %dcm\n", bandPound, bandLength);
-
-                // 通知应用层参数已更新
-                if(resBandServiceCB)
-                {
-                    (*resBandServiceCB)(RESBAND_PARAMS_UPDATED);
-                }
-
-                status = SUCCESS;
             }
             break;
 
@@ -624,7 +505,6 @@ void ResBand_HandleConnStatusCB(uint16_t connHandle, uint8_t changeType)
             (!linkDB_Up(connHandle))))
         {
             GATTServApp_InitCharCfg(connHandle, resBandMeasClientCharCfg);
-            GATTServApp_InitCharCfg(connHandle, resBandTrainingClientCharCfg);
         }
     }
 }
