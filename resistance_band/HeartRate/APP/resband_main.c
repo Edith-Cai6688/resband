@@ -75,9 +75,11 @@ int main(void)
     CH57X_BLEInit(); //1.使能TMOS调度系统
     HAL_Init();//2.使能硬件
     GAPRole_PeripheralInit();//3.使能BLE的应用协议
-    OY_SPI_Init();// 初始化位移读取传感器
+    
 
     ResBand_Init();
+    // OY_SPI_Init();// 初始化位移读取传感器
+    OY_GPIO_Test();
 
     Main_Circulation();//启动TMOS调度系统
 }

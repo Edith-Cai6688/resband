@@ -44,22 +44,26 @@ uint8_t OY_Read_Reg(uint8_t reg_addr) {
     uint8_t addr = reg_addr & 0x7F; // 读操作：最高位 MSB = 0
 
     // 1. 发送 8 位地址
-    GPIOB_ModeCfg(OY_SDIO_PIN, GPIO_ModeOut_PP_5mA); // 确保是输出
     for(int i = 7; i >= 0; i--) {
         GPIOB_ResetBits(OY_SCLK_PIN); // SCLK 下降沿：传输数据
+        DelayUs(1);
+
         if(addr & (1 << i)) 
             GPIOB_SetBits(OY_SDIO_PIN);
         else 
             GPIOB_ResetBits(OY_SDIO_PIN);
         
         DelayUs(10); // 保持时间
+
         GPIOB_SetBits(OY_SCLK_PIN);   // SCLK 上升沿：复位
         DelayUs(10);
+
     }
 
-    // 2. 切换阶段 (tHOLD)
-    // 必须在第 8 个时钟结束后，立刻释放数据线
-    GPIOB_ModeCfg(OY_SDIO_PIN, GPIO_ModeIN_Floating); // 切换为高阻态
+    // // 2. 切换阶段 (tHOLD)
+    // // 必须在第 8 个时钟结束后，立刻释放数据线
+    // GPIOB_ModeCfg(OY_SDIO_PIN, GPIO_ModeIN_Floating); // 切换为高阻态
+    GPIOB_ModeCfg(OY_SDIO_PIN, GPIO_ModeIN_PU);
     DelayUs(200); // 200us确保传感器准备好数据
 
     // 3. 读取 8 位数据
@@ -79,5 +83,17 @@ uint8_t OY_Read_Reg(uint8_t reg_addr) {
     return data;
 }
 
+void OY_GPIO_Test(void) {
+    // 1. 配置推挽输出
+    GPIOB_ModeCfg(OY_SDIO_PIN, GPIO_ModeOut_PP_5mA);
+    GPIOB_ModeCfg(OY_SCLK_PIN, GPIO_ModeOut_PP_5mA);
+    // 2. 强制输出高电平
+    GPIOB_SetBits(OY_SDIO_PIN);
+    GPIOB_SetBits(OY_SCLK_PIN);
+    // 3. 死循环，保持高电平
+    while(1) {
+        DelayMs(1000);
+    }
+}
 
 
